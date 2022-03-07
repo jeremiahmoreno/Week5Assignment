@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script>
+
+            //This class constructs and describes the Crew Members:
+            class CrewMember
+            {
+                constructor(nameCM, division, rank, position)
+                {
+                    this.nameCM = nameCM;
+                    this.division = division;
+                    this.rank = rank;
+                    this.position = position;
+                }
+                describe()
+                {
+                return `${this.rank} ${this.nameCM}, ${this.position} (${this.division} Division).`
+                }
+            }
+
+            //This class constructs and describes the Ship"
+            class Ship
+            {
+                constructor(shipName, shipClass)
+                {
+                    this.shipName = shipName;
+                    this.shipClass = shipClass
+                    this.shipCrew = [];
+                }
+                
+                //This method will add Crew Members:
+                addCrewMember(crewMember)
+                {
+                    if (crewMember instanceof CrewMember)
+                    {
+                        this.shipCrew.push(crewMember);
+                    }
+                }
+
+                //This method will describe the Ship:
+                describe()
+                {
+                    return `${this.shipName} is a ${this.shipClass} with ${this.shipCrew.length} crew members assigned.`;
+                }
+            }
+
+            //This class will act as the menu and drive choices:
+            class Menu
+            {
+                constructor()
+                {
+                    this.allShips = [];
+                    this.selectedShip = null;
+                }
+
+                startMenu()
+                {
+                    let topSelection = this.mainMenuOptions();
+
+                    while (topSelection != 0)
+                    {
+                        switch (topSelection)
+                        {
+                            case '1': 
+                                this.createShip();
+                                break;
+                            case '2':
+                                this.viewShip();
+                                break;
+                            case '3': 
+                                this.deleteShip();
+                                break;
+                            case '4':
+                                this.viewAllShips();
+                                break;
+                            default:
+                                topSelection = 0;
+                        }
+                        topSelection = this.mainMenuOptions();
+                    }
+
+                    alert('Goodbye!');
+                }
+
+                mainMenuOptions()
+                {
+                    return prompt
+                    (`
+                        0] EXIT
+                        1] Create New Ship
+                        2] View Ship
+                        3] Delete Ship
+                        4] Display All Ships
+                    `);
+                }
+
+                crewMemberOptions(crewInfo)
+                {
+                    return prompt
+                    (`
+                        1] Create Crew Member
+                        2] Delete Crew Member
+                        _____________________
+                        ${crewInfo}
+                    `);
+                }
+
+               //The code below implements the placeholder methods above:
+
+               //This method implements into createShip() above:
+               createShip()
+               {
+                    let shipName = prompt('Enter name for new ship:');
+                    let shipClass = prompt('Enter the ship class:');
+                    this.allShips.push(new Ship(shipName, shipClass));
+               }
+
+               //This method implements into viewShip() above:
+               viewShip()
+               {
+                   let index = prompt('Enter the index of the ship you wish to view:');
+                   if (index > -1 && index < this.allShips.length)
+                   {
+                       this.selectedShip = this.allShips[index];
+                       let shipDescription = 'Ship Name: USS ' + this.selectedShip.shipName + ' - ' + 
+                       this.selectedShip.shipClass + ' Class Starship' + '\n';
+
+                       for (let i = 0; i < this.selectedShip.shipCrew.length; i++)
+                       {
+                            shipDescription += i + '] ' + this.selectedShip.shipCrew[i].rank + ' ' +
+                            this.selectedShip.shipCrew[i].nameCM + ' - ' + this.selectedShip.shipCrew[i].position    
+                            + ' (' + this.selectedShip.shipCrew[i].division + ' Division)' + '\n';
+                       }
+
+                       let crewSelection = this.crewMemberOptions(shipDescription);
+                       switch(crewSelection)
+                       {
+                            case '1':
+                                this.addCrewMember();
+                                break;
+                            case '2':
+                                this.deleteCrewMember();
+                                break;
+                       }
+                   }
+               }
+
+               //This method implements into deleteShip() above:
+               deleteShip()
+               {
+                   let index = prompt('Enter the index of the ship you wish to delete:');
+                   if (index > -1 && index < this.allShips.length)
+                   {
+                       this.allShips.splice(index, 1);
+                   }
+               }
+               
+                /*This method implements into viewAllShips() above and will display the Ships
+                by iterating through them and creating a string that appears in an alert box.*/
+                viewAllShips()
+                    {
+                        let shipString = '';
+                        for(let i = 0; i < this.allShips.length; i++)
+                        {
+                            shipString += i + '] USS ' + this.allShips[i].shipName + '\n';
+                        }
+                        alert(shipString);
+                    }
+
+                //This method implements into createCrewMember() in the submenu above:
+                addCrewMember()
+                {
+                    let nameCM = prompt('Enter the name for the new crew member:');
+                    let division = prompt('Enter the divison to which the new crew member is assigned:');
+                    let rank = prompt('Enter the rank of the new crew member:');
+                    let position = prompt('Enter the current postion of the new crew member:');
+                    this.selectedShip.shipCrew.push(new CrewMember(nameCM, division, rank, position));
+                }
+
+                //This method implements into deleteCrewMember() in the submenu above:
+                deleteCrewMember()
+                {
+                    let index = prompt('Enter the index of the crew member you wish to delete:');
+                    if (index > -1 && index < this.selectedShip.shipCrew.length)
+                    {
+                        this.selectedShip.shipCrew.splice(index, 1);
+                    }
+                }
+            }
+            let menu = new Menu();
+            menu.startMenu();
+            console.log('The App Has Run Successfully.')
+        </script>
+    </body>
+</html>
